@@ -16,7 +16,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useToast } from '@/composables/toast';
+
 const {public: { apiBase }} = useRuntimeConfig();
+const $toast = useToast();
 
 const url = ref<string>('');
 
@@ -35,7 +38,7 @@ const getShortLink = async ():Promise<void> => {
         url: url.value
     }
 
-    const res = await fetch(`${apiBase}/url-shortener`, {
+    let res = await fetch(`${apiBase}/url-shortener`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -43,7 +46,8 @@ const getShortLink = async ():Promise<void> => {
         }
     })
 
-    console.log(res);
+    res = await res.json();
+    $toast.success(`http://${window.location.host}/${res.short_url}`);
 }
 </script>
 
