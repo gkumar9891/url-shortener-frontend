@@ -34,9 +34,17 @@ const isUrlValid = computed<boolean>(() => {
 })
 
 const getShortLink = async ():Promise<void> => {
+    
+    const urlRegex = /^(https?:\/\/)/;
+    
     let payload = {
         url: url.value
     }
+
+    if(!urlRegex.test(url.value)) {
+        payload.url = `https://${url.value}`
+    }
+
 
     let res = await fetch(`${apiBase}/url-shortener`, {
         method: "POST",
@@ -46,8 +54,9 @@ const getShortLink = async ():Promise<void> => {
         }
     })
 
+
     res = await res.json();
-    $toast.success(`http://${window.location.host}/${res.short_url}`);
+    $toast.success(`${window.location.protocol}//${window.location.host}/${res.short_url}`);
 }
 </script>
 
