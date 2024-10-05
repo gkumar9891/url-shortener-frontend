@@ -1,19 +1,19 @@
 import { ref } from "vue";
 
-const toasts = ref<{type: string, message: string}[]>([]);
+const toasts = ref<{type: string, data?: object, message?: string}[]>([]);
 
 export function useToast() {
-    const success = (message:string) => {
+    const success = (data:object) => {
         toasts.value.push({
            type: 'success',
-           message: message 
+           data: data 
         })
     }
 
     const error = (message:string) => {
         toasts.value.push({
            type: 'error',
-           message: message 
+           message: message
         })
     }
 

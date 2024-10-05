@@ -35,28 +35,39 @@ const isUrlValid = computed<boolean>(() => {
 
 const getShortLink = async ():Promise<void> => {
     
-    const urlRegex = /^(https?:\/\/)/;
-    
-    let payload = {
-        url: url.value
-    }
-
-    if(!urlRegex.test(url.value)) {
-        payload.url = `https://${url.value}`
-    }
-
-
-    let res = await fetch(`${apiBase}/url-shortener`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-            "content-type": "application/json"
+    try {
+        const urlRegex = /^(https?:\/\/)/;
+        
+        let payload = {
+            url: url.value
         }
-    })
+    
+        if(!urlRegex.test(url.value)) {
+            payload.url = `https://${url.value}`
+        }
 
-
-    res = await res.json();
-    $toast.success(`${window.location.protocol}//${window.location.host}/${res.short_url}`);
+        let res = await fetch(`${apiBase}/url-shortener`, {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+    
+        if (res.status == '500') {
+            $toast.error(`internal server error`)
+            return;
+        }
+    
+        res = await res.json();
+    
+        res.short_url = `${window.location.protocol}//${window.location.host}/${res.short_url}`
+        $toast.success(res);
+    } catch (error) {
+        console.log(error)
+        $toast.error(error.message)
+    }
+    
 }
 </script>
 

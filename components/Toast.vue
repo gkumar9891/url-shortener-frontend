@@ -1,15 +1,35 @@
 <template>
-  <div class="fixed top-0 right-0" role="alert">
+  <div class="fixed top-0 right-0 flex flex-col items-end" role="alert">
     <div v-for="toast,index in toasts" :key="index">
-      <div class="flex py-2 px-4 bg-green-400 rounded-md mb-2">
-        <button @click="copyText($event, toast.message)" @mouseout="resetCopyText($event)" v-if="toast.type == 'success'" class="tooltip">
+      <div v-if="toast.type == 'success'" class="flex items-start py-2 px-4 bg-green-400 rounded-md mb-2">
+        <button @click="copyText($event, toast.data.short_url)" @mouseout="resetCopyText($event)" v-if="toast.type == 'success'" class="tooltip mt-3">
           <span class="tooltiptext">Copy to clipboard</span>
           <img style="pointer-events: none" class="w-4 mr-3" src="/img/copy-link-icon.svg" alt="">
         </button>
         <div class="toast-body mr-3">
-          <NuxtLink :to="toast.message" target="_blank">
-          {{ toast.message }}
+          <p>
+            short url: 
+          <NuxtLink :to="toast.data.short_url" target="_blank">
+          {{ toast.data.short_url }}
           </NuxtLink>
+          </p>
+
+          <p>
+            long url: 
+          <NuxtLink :to="toast.data.original_url" target="_blank">
+          {{ toast.data.original_url }}
+          </NuxtLink>
+          </p>
+
+          
+        </div>
+        <button type="button" class="ml-auto mt-1" @click="deleteToast(index)">X</button>
+      </div>
+      <div v-else-if="toast.type == 'error'" class="flex items-start py-2 px-4 bg-red-400 rounded-md mb-2">
+        <div class="toast-body mr-3">
+          <p>
+            {{toast.message}}
+          </p>        
         </div>
         <button type="button" class="ml-auto" @click="deleteToast(index)">X</button>
       </div>
@@ -34,7 +54,7 @@ const copyText = (event: Event, text:string) => {
 }
 
 const resetCopyText = (event: Event) => {
-  event.target!.querySelector('.tooltiptext').innerHTML = "Copy to clipboard"
+  event.target!.querySelector('.tooltiptext').innerHTML = "Copy short url"
 }
 
 onMounted(() => {
