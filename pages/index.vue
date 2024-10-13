@@ -1,5 +1,4 @@
 <template>
-    <Toast></Toast>
     <section class="section pt-40">
         <div class="container mx-auto px-4">
         <div class="text-center mb-5">

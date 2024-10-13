@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 right-0 flex flex-col items-end" role="alert">
+  <div class="fixed top-0 right-0 flex flex-col items-end h-screen overflow-auto" role="alert">
     <div v-for="toast,index in toasts" :key="index">
       <div v-if="toast.type == 'success'" class="flex items-start py-2 px-4 bg-green-400 rounded-md mb-2">
         <button @click="copyText($event, toast.data.short_url)" @mouseout="resetCopyText($event)" v-if="toast.type == 'success'" class="tooltip mt-3">
