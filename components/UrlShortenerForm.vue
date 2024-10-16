@@ -17,8 +17,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useToast } from '@/composables/toast';
+import { type ApiResponse } from '@/types/response';
 
-const {public: { apiBase }} = useRuntimeConfig();
+const { public: { apiBase } } = useRuntimeConfig();
 const $toast = useToast();
 
 const url = ref<string>('');
@@ -33,41 +34,37 @@ const isUrlValid = computed<boolean>(() => {
     return !!pattern.test(url.value);
 })
 
-const getShortLink = async ():Promise<void> => {
-    
-    try {
-        const urlRegex = /^(https?:\/\/)/;
-        
-        let payload = {
-            url: url.value
-        }
-    
-        if(!urlRegex.test(url.value)) {
-            payload.url = `https://${url.value}`
-        }
+const getShortLink = async (): Promise<void> => {
+    const urlRegex = /^(https?:\/\/)/;
 
-        let res = await fetch(`${apiBase}/url-shortener`, {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                "content-type": "application/json"
-            }
-        })
-    
-        if (res.status == '500') {
-            $toast.error(`internal server error`)
+    let payload = {
+        url: url.value
+    }
+
+    if (!urlRegex.test(url.value)) {
+        payload.url = `https://${url.value}`
+    }
+
+    fetch(`${apiBase}/url-shortener`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+            "content-type": "application/json"
+        }
+    }).then(async res => {
+        if (res.status.toString().startsWith('4') || res.status.toString().startsWith('5')) {
+            let _res: ApiResponse = await res.json();
+            $toast.error(`${_res.message}`)
             return;
         }
-    
-        res = await res.json();
-    
-        res.short_url = `${window.location.protocol}//${window.location.host}/${res.short_url}`
-        $toast.success(res);
-    } catch (error) {
-        console.log(error)
+
+        let _res = await res.json();
+
+        _res.data.short_url = `${window.location.protocol}//${window.location.host}/${_res.data.short_url}`
+        $toast.success(_res.data);
+    }).catch((error: Error) => {
         $toast.error(error.message)
-    }
-    
+    })
 }
 </script>
 
