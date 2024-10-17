@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import {type ApiResponse} from '@/types/response'
 const { public: { apiBase } } = useRuntimeConfig();
 const route = useRoute();
 const isServiceAvailable = ref<boolean>(true);
@@ -21,14 +22,14 @@ onMounted(async () => {
             }
         })
 
-        if (res.status == '404') {
+        if (!res.ok) {
             isDataFound.value = false;
             return
         }
 
-        res = await res.json();
+        let _res: ApiResponse = await res.json();
 
-        await navigateTo(res.original_url, { external: true });
+        await navigateTo(_res.data.original_url, { external: true });
     } catch (error) {
         console.log(error);
 
