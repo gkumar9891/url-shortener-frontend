@@ -5,7 +5,7 @@
             <input v-model="url" type="text" class="flex-1 px-3" placeholder="paste your url" aria-label="url field"
                 aria-describedby="paste your url here" />
         </div>
-        <div v-if="url && !isUrlValid" class="text-red-400 text-center mt-4">Enter a valid url</div>
+        <div v-if="!isUrlValid" class="text-red-400 text-center mt-4">Enter a valid url</div>
         <div class="text-center mt-5">
             <button :disabled="!isUrlValid || !url" type="submit"
                 class="disabled:opacity-75 py-3 px-3 bg-blue-500 text-white rounded-md transform motion-reduce:transform-none hover:-translate-y-1 hover:scale-110 transition ease-in-out duration-300">Get
@@ -18,21 +18,14 @@
 import { computed, ref } from "vue";
 import { useToast } from '@/composables/toast';
 import { type ApiResponse } from '@/types/response';
+import {isUrlValid as urlValidation} from '@/utils/urlValidation';
 
 const { public: { apiBase } } = useRuntimeConfig();
 const $toast = useToast();
 
 const url = ref<string>('');
 
-const isUrlValid = computed<boolean>(() => {
-    const pattern: RegExp = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-    return !!pattern.test(url.value);
-})
+const isUrlValid = urlValidation(url);
 
 const getShortLink = async (): Promise<void> => {
     const urlRegex = /^(https?:\/\/)/;
