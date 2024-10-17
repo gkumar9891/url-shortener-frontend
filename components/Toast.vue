@@ -1,8 +1,9 @@
 <template>
-  <div class="fixed top-0 right-0 flex flex-col items-end h-screen overflow-auto" role="alert">
+  <Teleport to="#teleports">
+  <div class="fixed top-0 right-0 flex flex-col items-end h-screen overflow-auto toast-container" role="alert">
     <div v-for="toast,index in toasts" :key="index">
       <div v-if="toast.type == 'success'" class="flex items-start py-2 px-4 bg-green-400 rounded-md mb-2">
-        <button @click="copyText($event, toast.data.short_url)" @mouseout="resetCopyText($event)" v-if="toast.type == 'success'" class="tooltip mt-3">
+        <button @click="copyText($event, toast.data.short_url)" @mouseout="resetCopyText($event)" v-if="toast.type == 'success'" class="tooltip mt-3 has-[:hover]:">
           <span class="tooltiptext">Copy to clipboard</span>
           <img style="pointer-events: none" class="w-4 mr-3" src="/img/copy-link-icon.svg" alt="">
         </button>
@@ -35,6 +36,7 @@
       </div>
     </div>
   </div>
+</Teleport>
 </template>
 
 <script setup lang="ts">

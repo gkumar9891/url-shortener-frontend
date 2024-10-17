@@ -71,7 +71,6 @@ const getShortLink = async (): Promise<void> => {
         $toast.success(_res.data);
 
     }).catch( (err:Error) => {
-        debugger
         $toast.error(err.message)
     })
 }

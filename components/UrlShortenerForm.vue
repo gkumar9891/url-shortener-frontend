@@ -45,8 +45,7 @@ const getShortLink = async (): Promise<void> => {
             "content-type": "application/json"
         }
     }).then(async res => {
-        debugger
-        if (res.status.toString().startsWith('4') || res.status.toString().startsWith('5')) {
+        if (!res.ok) {
             let _res: ApiResponse = await res.json();
             $toast.error(`${_res.message}`)
             return;
