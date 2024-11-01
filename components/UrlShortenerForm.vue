@@ -7,11 +7,12 @@
         </div>
         <div v-if="!isUrlValid" class="text-red-400 text-center mt-4">Enter a valid url</div>
 
-        <label class="block mb-4" for="expiration"><input id="expiration" type="checkbox" v-model="showExpiration">Want
+        <label class="mb-4 flex items-center" for="expiration"><input id="expiration" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mr-2" type="checkbox" v-model="showExpiration">Want
             to add automatic expiration</label>
 
         <div v-if="showExpiration">
-            <input v-model="expirationDate" type="date" :min="todayDate" />
+            <label class="block mb-2" for="date">Select Date</label>
+            <input id="date" v-model="expirationDate" type="date" :min="todayDate" />
         </div>
 
         <div class="text-center mt-5">
