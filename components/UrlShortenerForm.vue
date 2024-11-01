@@ -53,7 +53,7 @@ const getShortLink = async (): Promise<void> => {
         url: url.value
     }
 
-    if(showExpiration) {
+    if(showExpiration.value) {
         payload.expiryDate = expirationDate.value;
     }
 
