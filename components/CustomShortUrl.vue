@@ -45,7 +45,17 @@ const shortCode = ref('');
 const showExpiration = ref(false);
 const expirationDate = ref('');
 
-const todayDate = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`;
+const todayDate = computed<string>(() => {
+    let currentDate = new Date().getTime();
+    currentDate += (1000*60*60*24);
+
+    let date:number|string = new Date(currentDate).getDate()
+    if(date < 10) {
+        date = '0' + date; 
+    }
+
+    return `${new Date(currentDate).getFullYear()}-${new Date(currentDate).getMonth()+1}-${date}`
+})
 
 const isUrlValid = urlValidation(longUrl);
 const isShortCodeValid = shortCodeValidation(shortCode);
