@@ -1,5 +1,6 @@
 <template>
     <Toast></Toast>
     <Navigation></Navigation>
-    <slot></slot>    
+    <slot></slot>
+    <FootNote></FootNote>
 </template>
