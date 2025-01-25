@@ -21,7 +21,6 @@ const canDownload = ref(false);
 const fileHandler = () => {
     let filePath:any;
     const fileInput = async function (event: any) {
-        debugger
         const file = event.target.files[0];
         const form = new FormData();
         form.append("file", file);
@@ -37,7 +36,6 @@ const fileHandler = () => {
         canDownload.value = true
     }
     const download = async function() {
-        debugger
         if(filePath) {
             const res = await fetch(`${apiBase}/download`, {
                 method: "POST",
